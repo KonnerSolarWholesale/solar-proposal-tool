@@ -56,7 +56,7 @@
         <p class="text-sm text-gray-600">Date: <span id="dateText"></span></p>
       </div>
       <h2 class="text-xl font-bold text-yellow-600 mb-1" id="proposalTitle"></h2>
-<h3 class="text-md font-medium text-gray-800 mb-4" id="systemNameText"></h3>
+      <h3 class="text-md font-medium text-gray-800 mb-4" id="systemNameText"></h3>
       <p id="customerInfo" class="text-gray-700 mb-4 text-sm"></p>
 
       <h3 class="text-lg font-semibold text-gray-800 mb-2">Your DIY Kit</h3>
@@ -84,6 +84,7 @@
       const email = form.email.value;
       const phone = form.phone.value;
       const date = form.date.value;
+      const systemName = form.systemName.value;
       const panels = form.panels.value;
       const inverter = form.inverter.value;
       const battery = form.battery.value;
@@ -96,7 +97,7 @@
 
       document.getElementById('dateText').innerText = date;
       document.getElementById('proposalTitle').innerText = `Solar Proposal For ${customer}`;
-document.getElementById('systemNameText').innerText = systemName;
+      document.getElementById('systemNameText').innerText = systemName;
       document.getElementById('customerInfo').innerHTML =
         `<div>${address}</div><div>${phone || ''}</div><div>${email || ''}</div>`;
 
