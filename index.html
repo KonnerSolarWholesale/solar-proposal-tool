@@ -4,15 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solar Wholesale Proposal Tool</title>
+  <title>Solar Proposal</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script>
     window.jsPDF = window.jspdf.jsPDF;
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+    }
+    .bg-cover-custom {
+      background-image: url('https://images.unsplash.com/photo-1601121148511-1d94f9251bc8?auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.93);
+      padding: 2rem;
+      border-radius: 0.75rem;
+    }
+  </style>
 </head>
-<body class="bg-white bg-opacity-90 min-h-screen p-6">
+<body class="bg-white min-h-screen p-6">
   <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-lg">
     <img src="6-Transparent-SolarWholesale-horiz.webp" class="h-12 mb-4" alt="Solar Wholesale Logo" />
     <h1 class="text-2xl font-bold mb-4">Solar Proposal Generator</h1>
@@ -24,44 +39,32 @@
         <input type="date" name="date" class="border p-2 rounded" required />
         <input type="number" placeholder="System Size (kW)" name="systemSize" class="border p-2 rounded" required />
       </div>
-
       <input type="text" placeholder="Panel Brand & Wattage (e.g., NEA 410W)" name="panels" class="border p-2 rounded w-full" required />
       <input type="number" placeholder="Number of Panels" name="panelQty" class="border p-2 rounded w-full" required />
-
-      <div class="flex items-center space-x-4">
-        <label class="flex items-center">
-          <input type="checkbox" name="tigoIncluded" class="mr-2"> Include Tigo Optimizers
-        </label>
-        <input type="number" placeholder="Tigo Quantity" name="tigoQty" class="border p-2 rounded w-32" />
-      </div>
-
-      <input type="text" placeholder="Inverter(s) (e.g., 1 EG4 Flex Boss Hybrid)" name="inverter" class="border p-2 rounded w-full" required />
-      <input type="text" placeholder="Battery Info (e.g., 1x 14.3kWh EG4 PowerPro)" name="battery" class="border p-2 rounded w-full" required />
-
+      <input type="text" placeholder="Inverter(s)" name="inverter" class="border p-2 rounded w-full" required />
+      <input type="text" placeholder="Battery Info" name="battery" class="border p-2 rounded w-full" required />
+      <input type="number" placeholder="Tigo Optimizers (0 if none)" name="tigoQty" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Total Cost Before Incentives" name="total" class="border p-2 rounded w-full" required />
-
-      <button type="button" onclick="generatePDF()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Generate PDF</button>
+      <button type="button" onclick="generatePDF()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Generate PDF</button>
     </form>
   </div>
 
-  <div id="pdfContent" class="hidden max-w-3xl mx-auto p-6 text-black" style="
-    background-image: url('https://images.unsplash.com/photo-1601121148511-1d94f9251bc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-    background-size: cover;
-    background-position: center;
-    color: #000;
-    border-radius: 1rem;
-  ">
-    <div class="bg-white bg-opacity-90 rounded-xl p-6 shadow-lg">
-      <img src="6-Transparent-SolarWholesale-horiz.webp" class="h-10 mb-4" />
-      <h2 id="headerText" class="text-2xl font-bold mb-1 text-yellow-600"></h2>
-      <p id="addressText" class="text-md mb-4 font-medium"></p>
-
-      <ul id="detailsList" class="list-disc ml-5 space-y-1 text-sm"></ul>
-
-      <p id="costText" class="font-bold text-lg mt-4 text-gray-800"></p>
-      <p class="italic text-sm mt-2 text-gray-600">You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, I don't like to include it in my price.</p>
-
-      <p class="mt-6 text-sm text-gray-800">Contact: Konner Knobel | konner.knobel@solarwholesale.com | 385-257-9360</p>
+  <div id="pdfContent" class="hidden max-w-3xl mx-auto mt-8 p-6 text-black bg-cover-custom">
+    <div class="overlay">
+      <div class="flex justify-between items-center mb-4">
+        <img src="6-Transparent-SolarWholesale-horiz.webp" class="h-10" />
+        <p class="text-sm text-gray-600">Date: <span id="dateText"></span></p>
+      </div>
+      <h2 class="text-xl font-bold text-yellow-600 mb-1" id="systemSummary"></h2>
+      <p class="mb-4 text-gray-800" id="customerInfo"></p>
+      <div class="border-t border-b py-2 my-4">
+        <ul class="list-disc list-inside text-sm space-y-1" id="equipmentList"></ul>
+      </div>
+      <p class="text-lg font-semibold text-gray-900" id="costText"></p>
+      <p class="text-sm italic text-gray-700 mt-2">You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, I don't like to include it in my price.</p>
+      <div class="mt-6 border-t pt-2 text-sm text-gray-800">
+        Contact: Konner Knobel | konner.knobel@solarwholesale.com | 385-257-9360
+      </div>
     </div>
   </div>
 
@@ -69,34 +72,33 @@
     function generatePDF() {
       const form = document.getElementById('proposalForm');
       const content = document.getElementById('pdfContent');
+      const systemSize = form.systemSize.value;
+      const date = form.date.value;
       const customer = form.customer.value;
       const address = form.address.value;
-      const date = form.date.value;
-      const systemSize = form.systemSize.value;
       const panels = form.panels.value;
       const panelQty = form.panelQty.value;
-      const tigoIncluded = form.tigoIncluded.checked;
-      const tigoQty = form.tigoQty.value;
       const inverter = form.inverter.value;
       const battery = form.battery.value;
+      const tigoQty = parseInt(form.tigoQty.value);
       const total = form.total.value;
 
-      document.getElementById('headerText').innerText = `${systemSize} kW Solar + Battery — ${date}`;
-      document.getElementById('addressText').innerText = `${customer}, ${address}`;
+      document.getElementById('systemSummary').innerText = `${systemSize} kW Solar + Battery`;
+      document.getElementById('dateText').innerText = date;
+      document.getElementById('customerInfo').innerText = `${customer}, ${address}`;
 
-      const list = document.getElementById('detailsList');
-      list.innerHTML = '';
-      list.innerHTML += `<li>${panelQty}x ${panels}</li>`;
-      if (tigoIncluded && tigoQty) list.innerHTML += `<li>${tigoQty}x Tigo Optimizers</li>`;
-      list.innerHTML += `<li>${inverter}</li>`;
-      list.innerHTML += `<li>${battery}</li>`;
-      list.innerHTML += `<li>Snap N Rack Mounting</li>`;
-      list.innerHTML += `<li>Misc Hardware and Electrical Components</li>`;
-      list.innerHTML += `<li>Design, Engineering, Permit, Net Metering</li>`;
-      list.innerHTML += `<li>Shipping</li>`;
-
+      const list = document.getElementById('equipmentList');
+      list.innerHTML = `
+        <li>${panelQty}x ${panels}</li>
+        ${tigoQty > 0 ? `<li>${tigoQty}x Tigo Optimizers</li>` : ''}
+        <li>${inverter}</li>
+        <li>${battery}</li>
+        <li>Snap N Rack Mounting</li>
+        <li>Misc Hardware and Electrical Components</li>
+        <li>Design, Engineering, Permit, Net Metering</li>
+        <li>Shipping</li>
+      `;
       document.getElementById('costText').innerText = `Total Cost Before Incentives: $${total}`;
-
       content.classList.remove('hidden');
 
       html2canvas(content).then(canvas => {
