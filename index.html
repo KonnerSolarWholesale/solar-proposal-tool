@@ -42,10 +42,10 @@
       <input type="text" placeholder="Optimizers (leave blank if none)" name="optimizers" class="border p-2 rounded w-full" />
       <input type="text" placeholder="System Cost" name="initialCost" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Sales Rep Name" name="repName" class="border p-2 rounded w-full" />
-<input type="text" placeholder="Rep Email" name="repEmail" class="border p-2 rounded w-full" />
-<input type="text" placeholder="Rep Phone" name="repPhone" class="border p-2 rounded w-full" />
-<input type="date" placeholder="Expiration Date" name="expirationDate" class="border p-2 rounded w-full" />
-<button type="button" onclick="generatePDF()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Generate PDF</button>
+      <input type="text" placeholder="Rep Email" name="repEmail" class="border p-2 rounded w-full" />
+      <input type="text" placeholder="Rep Phone" name="repPhone" class="border p-2 rounded w-full" />
+      <input type="date" placeholder="Expiration Date" name="expirationDate" class="border p-2 rounded w-full" />
+      <button type="button" onclick="generatePDF()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Generate PDF</button>
     </form>
   </div>
 
@@ -66,10 +66,10 @@
         <p class="italic text-sm mt-2 text-gray-600">
           You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, I don't like to include it in my price.
         </p>
+        <p class="text-xs mt-4 text-gray-700" id="expirationText"></p>
       </div>
 
-      <p class="text-xs mt-4 text-gray-700" id="expirationText"></p>
-<div class="mt-6 text-xs text-gray-700 border-t pt-2" id="customContactInfo"></div>
+      <div class="mt-6 text-xs text-gray-700 border-t pt-2" id="customContactInfo"></div>
     </div>
   </div>
 
@@ -88,10 +88,15 @@
       const battery = form.battery.value;
       const optimizers = form.optimizers.value;
       const initialCost = form.initialCost.value;
+      const repName = form.repName.value;
+      const repEmail = form.repEmail.value;
+      const repPhone = form.repPhone.value;
+      const expirationDate = form.expirationDate.value;
 
       document.getElementById('dateText').innerText = date;
       document.getElementById('proposalTitle').innerText = `Solar Proposal For ${customer}`;
-      document.getElementById('customerInfo').innerText = `${address}${phone ? ', ' + phone : ''}${email ? ', ' + email : ''}`;
+      document.getElementById('customerInfo').innerText =
+        `${address}${phone ? ', ' + phone : ''}${email ? ', ' + email : ''}`;
 
       const list = document.getElementById('equipmentList');
       list.innerHTML = `
@@ -106,30 +111,12 @@
       `;
 
       document.getElementById('initialCostText').innerText = `System Cost: $${initialCost}`;
+      document.getElementById('expirationText').innerText =
+        expirationDate ? `*This bid is valid until ${expirationDate}` : '';
+      document.getElementById('customContactInfo').innerText =
+        `Contact: ${repName || 'Sales Rep'} | ${repEmail || 'email@example.com'} | ${repPhone || '555-555-5555'}`;
 
-      
-      const repName = form.repName.value;
-      const repEmail = form.repEmail.value;
-      const repPhone = form.repPhone.value;
-      document.getElementById('customContactInfo').innerText =
-        'Contact: ' + (repName || 'Sales Rep') + ' | ' +
-        (repEmail || 'email@example.com') + ' | ' +
-        (repPhone || '555-555-5555');
-      
-      const repName = form.repName.value;
-      const repEmail = form.repEmail.value;
-      const repPhone = form.repPhone.value;
-      const expirationDate = form.expirationDate.value;
-      document.getElementById('customContactInfo').innerText =
-        'Contact: ' + (repName || 'Sales Rep') + ' | ' +
-        (repEmail || 'email@example.com') + ' | ' +
-        (repPhone || '555-555-5555');
-      document.getElementById('expirationText').innerText = expirationDate
-        ? '*This bid is valid until ' + expirationDate
-        : '';
       content.classList.remove('hidden');
-    
-    
 
       html2canvas(content, { scale: 2 }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
