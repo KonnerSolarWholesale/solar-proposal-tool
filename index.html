@@ -39,8 +39,12 @@
       <input type="text" placeholder="Panel Details (e.g., 20x 410W NEA Panels)" name="panels" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Inverter Details" name="inverter" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Battery Info (leave blank if none)" name="battery" class="border p-2 rounded w-full" />
+      <input type="text" placeholder="Optimizers (leave blank if none)" name="optimizers" class="border p-2 rounded w-full" />
       <input type="text" placeholder="System Cost" name="initialCost" class="border p-2 rounded w-full" required />
-      <button type="button" onclick="generatePDF()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Generate PDF</button>
+      <input type="text" placeholder="Sales Rep Name" name="repName" class="border p-2 rounded w-full" />
+<input type="text" placeholder="Rep Email" name="repEmail" class="border p-2 rounded w-full" />
+<input type="text" placeholder="Rep Phone" name="repPhone" class="border p-2 rounded w-full" />
+<button type="button" onclick="generatePDF()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Generate PDF</button>
     </form>
   </div>
 
@@ -63,9 +67,7 @@
         </p>
       </div>
 
-      <div class="mt-6 text-xs text-gray-700 border-t pt-2">
-        Contact: Konner Knobel | konner.knobel@solarwholesale.com | 385-257-9360
-      </div>
+      <div class="mt-6 text-xs text-gray-700 border-t pt-2" id="customContactInfo"></div>
     </div>
   </div>
 
@@ -79,10 +81,10 @@
       const email = form.email.value;
       const phone = form.phone.value;
       const date = form.date.value;
-      const systemName = form.systemName.value;
       const panels = form.panels.value;
       const inverter = form.inverter.value;
       const battery = form.battery.value;
+      const optimizers = form.optimizers.value;
       const initialCost = form.initialCost.value;
 
       document.getElementById('dateText').innerText = date;
@@ -93,6 +95,7 @@
       list.innerHTML = `
         <li>${panels}</li>
         <li>${inverter}</li>
+        ${optimizers.trim() ? `<li>${optimizers}</li>` : ''}
         ${battery.trim() ? `<li>${battery}</li>` : ''}
         <li>Snap N Rack Mounting</li>
         <li>Misc Hardware and Electrical Components</li>
@@ -102,7 +105,16 @@
 
       document.getElementById('initialCostText').innerText = `System Cost: $${initialCost}`;
 
+      
+      const repName = form.repName.value;
+      const repEmail = form.repEmail.value;
+      const repPhone = form.repPhone.value;
+      document.getElementById('customContactInfo').innerText =
+        'Contact: ' + (repName || 'Sales Rep') + ' | ' +
+        (repEmail || 'email@example.com') + ' | ' +
+        (repPhone || '555-555-5555');
       content.classList.remove('hidden');
+    
 
       html2canvas(content, { scale: 2 }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
