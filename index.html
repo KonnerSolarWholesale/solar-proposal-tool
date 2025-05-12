@@ -11,14 +11,6 @@
     window.jsPDF = window.jspdf.jsPDF;
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background-image: url('https://images.unsplash.com/photo-1601121148511-1d94f9251bc8');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-  </style>
 </head>
 <body class="bg-white bg-opacity-90 min-h-screen p-6">
   <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-lg">
@@ -52,17 +44,25 @@
     </form>
   </div>
 
-  <div id="pdfContent" class="hidden p-6 max-w-3xl bg-white text-black">
-    <img src="6-Transparent-SolarWholesale-horiz.webp" class="h-10 mb-4" />
-    <p id="headerText" class="text-xl font-semibold mb-2"></p>
-    <p id="addressText" class="mb-4"></p>
+  <div id="pdfContent" class="hidden max-w-3xl mx-auto p-6 text-black" style="
+    background-image: url('https://images.unsplash.com/photo-1601121148511-1d94f9251bc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    color: #000;
+    border-radius: 1rem;
+  ">
+    <div class="bg-white bg-opacity-90 rounded-xl p-6 shadow-lg">
+      <img src="6-Transparent-SolarWholesale-horiz.webp" class="h-10 mb-4" />
+      <h2 id="headerText" class="text-2xl font-bold mb-1 text-yellow-600"></h2>
+      <p id="addressText" class="text-md mb-4 font-medium"></p>
 
-    <ul id="detailsList" class="list-disc ml-5 space-y-1"></ul>
+      <ul id="detailsList" class="list-disc ml-5 space-y-1 text-sm"></ul>
 
-    <p id="costText" class="font-bold mt-4"></p>
-    <p class="italic text-sm mt-2">You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, I don't like to include it in my price.</p>
+      <p id="costText" class="font-bold text-lg mt-4 text-gray-800"></p>
+      <p class="italic text-sm mt-2 text-gray-600">You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, I don't like to include it in my price.</p>
 
-    <p class="mt-6 text-sm">Contact: Konner Knobel | konner.knobel@solarwholesale.com | 385-257-9360</p>
+      <p class="mt-6 text-sm text-gray-800">Contact: Konner Knobel | konner.knobel@solarwholesale.com | 385-257-9360</p>
+    </div>
   </div>
 
   <script>
