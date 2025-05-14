@@ -28,19 +28,20 @@
   <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg">
     <img src="6-Transparent-SolarWholesale-horiz.webp" class="h-12 mb-6" alt="Solar Wholesale Logo" />
     <h1 class="text-2xl font-bold text-yellow-600 mb-2">Solar Proposal Generator</h1>
-
     <form id="proposalForm" class="space-y-4">
       <input type="text" placeholder="Customer Name" name="customer" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Address" name="address" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Email" name="email" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Phone" name="phone" class="border p-2 rounded w-full" />
       <input type="date" name="date" class="border p-2 rounded w-full" required />
-      <input type="text" placeholder="System Name (e.g., 8.2 kW Grid-Tied DIY Kit)" name="systemName" class="border p-2 rounded w-full" required />
-      <input type="text" placeholder="Panel Details (e.g., 20x 410W NEA Panels)" name="panels" class="border p-2 rounded w-full" required />
+      <input type="text" placeholder="System Name" name="systemName" class="border p-2 rounded w-full" required />
+      <input type="text" placeholder="Panel Details" name="panels" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Inverter Details" name="inverter" class="border p-2 rounded w-full" required />
-      <input type="text" placeholder="Battery Info (leave blank if none)" name="battery" class="border p-2 rounded w-full" />
-      <input type="text" placeholder="Optimizers (leave blank if none)" name="optimizers" class="border p-2 rounded w-full" />
+      <input type="text" placeholder="Battery Info" name="battery" class="border p-2 rounded w-full" />
+      <input type="text" placeholder="Optimizers" name="optimizers" class="border p-2 rounded w-full" />
       <input type="text" placeholder="System Cost" name="initialCost" class="border p-2 rounded w-full" required />
+      <input type="text" placeholder="Discount Name (e.g., Memorial Day Discount)" name="discountName" class="border p-2 rounded w-full" />
+      <input type="text" placeholder="Discount Amount (e.g., 500)" name="discountAmount" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Sales Rep Name" name="repName" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Rep Email" name="repEmail" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Rep Phone" name="repPhone" class="border p-2 rounded w-full" />
@@ -58,18 +59,16 @@
       <h2 class="text-xl font-bold text-yellow-600 mb-1" id="proposalTitle"></h2>
       <h3 class="text-md font-medium text-gray-800 mb-4" id="systemNameText"></h3>
       <p id="customerInfo" class="text-gray-700 mb-4 text-sm"></p>
-
       <h3 class="text-lg font-semibold text-gray-800 mb-2">Your DIY Kit</h3>
       <ul class="list-disc ml-6 space-y-1 text-sm" id="equipmentList"></ul>
-
       <div class="mt-6 text-sm text-gray-700 space-y-1">
         <p id="initialCostText" class="font-semibold"></p>
+        <p id="discountText" class="text-gray-700 text-sm"></p>
         <p class="italic text-sm mt-2 text-gray-600">
           You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, we don't like to include it in our price.
         </p>
         <p class="text-xs mt-4 text-gray-700" id="expirationText"></p>
       </div>
-
       <div class="mt-6 text-xs text-gray-700 border-t pt-2" id="customContactInfo"></div>
     </div>
   </div>
@@ -90,6 +89,8 @@
       const battery = form.battery.value;
       const optimizers = form.optimizers.value;
       const initialCost = form.initialCost.value;
+      const discountName = form.discountName.value;
+      const discountAmount = form.discountAmount.value;
       const repName = form.repName.value;
       const repEmail = form.repEmail.value;
       const repPhone = form.repPhone.value;
@@ -98,8 +99,7 @@
       document.getElementById('dateText').innerText = date;
       document.getElementById('proposalTitle').innerText = `Solar Proposal For ${customer}`;
       document.getElementById('systemNameText').innerText = systemName;
-      document.getElementById('customerInfo').innerHTML =
-        `<div>${address}</div><div>${phone || ''}</div><div>${email || ''}</div>`;
+      document.getElementById('customerInfo').innerHTML = `<div>${address}</div><div>${phone || ''}</div><div>${email || ''}</div>`;
 
       const list = document.getElementById('equipmentList');
       list.innerHTML = `
@@ -110,15 +110,14 @@
         <li>Snap N Rack Mounting</li>
         <li>Misc Hardware and Electrical Components</li>
         <li>Design, Engineering, Permitting, Net Metering</li>
-<li>Monitoring</li>
+        <li>Monitoring</li>
         <li>Shipping</li>
       `;
 
       document.getElementById('initialCostText').innerText = `System Cost: $${initialCost}`;
-      document.getElementById('expirationText').innerText =
-        expirationDate ? `*This bid is valid until ${expirationDate}` : '';
-      document.getElementById('customContactInfo').innerText =
-        `Contact: ${repName || 'Sales Rep'} | ${repEmail || 'email@example.com'} | ${repPhone || '555-555-5555'}`;
+      document.getElementById('discountText').innerText = (discountName && discountAmount) ? `${discountName}: -$${discountAmount}` : '';
+      document.getElementById('expirationText').innerText = expirationDate ? `*This bid is valid until ${expirationDate}` : '';
+      document.getElementById('customContactInfo').innerText = `Contact: ${repName || 'Sales Rep'} | ${repEmail || 'email@example.com'} | ${repPhone || '555-555-5555'}`;
 
       content.classList.remove('hidden');
 
