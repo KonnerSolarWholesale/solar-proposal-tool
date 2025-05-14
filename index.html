@@ -62,7 +62,9 @@
       <h3 class="text-lg font-semibold text-gray-800 mb-2">Your DIY Kit</h3>
       <ul class="list-disc ml-6 space-y-1 text-sm" id="equipmentList"></ul>
       <div class="mt-6 text-sm text-gray-700 space-y-1">
-        <p id="initialCostText" class="font-semibold"></p>
+        <p id="grossCostText" class="font-semibold"></p>
+<p id="discountText" class="text-gray-700 text-sm"></p>
+<p id="netCostText" class="font-bold text-md text-gray-900"></p>
         <p id="discountText" class="text-gray-700 text-sm"></p>
         <p class="italic text-sm mt-2 text-gray-600">
           You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, we don't like to include it in our price.
@@ -91,6 +93,9 @@
       const initialCost = form.initialCost.value;
       const discountName = form.discountName.value;
       const discountAmount = form.discountAmount.value;
+const grossCost = parseFloat(initialCost);
+const discountValue = parseFloat(discountAmount) || 0;
+const netCost = grossCost - discountValue;
       const repName = form.repName.value;
       const repEmail = form.repEmail.value;
       const repPhone = form.repPhone.value;
@@ -114,7 +119,11 @@
         <li>Shipping</li>
       `;
 
-      document.getElementById('initialCostText').innerText = `System Cost: $${initialCost}`;
+      
+    document.getElementById('grossCostText').innerText = `Gross System Cost: $${grossCost.toFixed(2)}`;
+    document.getElementById('discountText').innerText = (discountName && discountAmount) ? `${discountName}: -$${discountValue.toFixed(2)}` : '';
+    document.getElementById('netCostText').innerText = `Total After Discount: $${netCost.toFixed(2)}`;
+    
       document.getElementById('discountText').innerText = (discountName && discountAmount) ? `${discountName}: -$${discountAmount}` : '';
       document.getElementById('expirationText').innerText = expirationDate ? `*This bid is valid until ${expirationDate}` : '';
       document.getElementById('customContactInfo').innerText = `Contact: ${repName || 'Sales Rep'} | ${repEmail || 'email@example.com'} | ${repPhone || '555-555-5555'}`;
