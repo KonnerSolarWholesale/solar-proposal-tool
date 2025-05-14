@@ -120,12 +120,12 @@ const netCost = grossCost - discountValue;
       `;
 
       
-    document.getElementById('grossCostText').innerText = `System Cost: $${grossCost.toFixed(2)}`;
+    document.getElementById('grossCostText').innerText = `System Cost: $${grossCost.toLocaleString()}`;
     const discountLine = document.getElementById('discountText');
     const netLine = document.getElementById('netCostText');
     if (discountName && discountAmount) {
       discountLine.innerText = `${discountName}: -$${discountValue.toFixed(2)}`;
-      netLine.innerText = `Total After Discount: $${netCost.toFixed(2)}`;
+      netLine.innerText = `Total After Discount: $${netCost.toLocaleString()}`;
       discountLine.classList.remove('hidden');
       netLine.classList.remove('hidden');
     } else {
