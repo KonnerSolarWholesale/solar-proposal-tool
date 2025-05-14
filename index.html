@@ -93,8 +93,8 @@
       const initialCost = form.initialCost.value;
       const discountName = form.discountName.value;
       const discountAmount = form.discountAmount.value;
-const grossCost = parseFloat(initialCost);
-const discountValue = parseFloat(discountAmount) || 0;
+const grossCost = parseFloat(initialCost.replace(/[^\d.]/g, ""));
+const discountValue = parseFloat(discountAmount.replace(/[^\d.]/g, "")) || 0;
 const netCost = grossCost - discountValue;
       const repName = form.repName.value;
       const repEmail = form.repEmail.value;
