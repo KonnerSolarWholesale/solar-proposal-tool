@@ -63,8 +63,8 @@
       <ul class="list-disc ml-6 space-y-1 text-sm" id="equipmentList"></ul>
       <div class="mt-6 text-sm text-gray-700 space-y-1">
         <p id="grossCostText" class="font-semibold"></p>
-<p id="discountText" class="text-gray-700 text-sm"></p>
-<p id="netCostText" class="font-bold text-md text-gray-900"></p>
+<p id="discountText" class="text-gray-700 text-sm hidden"></p>
+<p id="netCostText" class="font-bold text-md text-gray-900 hidden"></p>
         <p id="discountText" class="text-gray-700 text-sm"></p>
         <p class="italic text-sm mt-2 text-gray-600">
           You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, we don't like to include it in our price.
@@ -120,9 +120,18 @@ const netCost = grossCost - discountValue;
       `;
 
       
-    document.getElementById('grossCostText').innerText = `Gross System Cost: $${grossCost.toFixed(2)}`;
-    document.getElementById('discountText').innerText = (discountName && discountAmount) ? `${discountName}: -$${discountValue.toFixed(2)}` : '';
-    document.getElementById('netCostText').innerText = `Total After Discount: $${netCost.toFixed(2)}`;
+    document.getElementById('grossCostText').innerText = `System Cost: $${grossCost.toFixed(2)}`;
+    const discountLine = document.getElementById('discountText');
+    const netLine = document.getElementById('netCostText');
+    if (discountName && discountAmount) {
+      discountLine.innerText = `${discountName}: -$${discountValue.toFixed(2)}`;
+      netLine.innerText = `Total After Discount: $${netCost.toFixed(2)}`;
+      discountLine.classList.remove('hidden');
+      netLine.classList.remove('hidden');
+    } else {
+      discountLine.classList.add('hidden');
+      netLine.classList.add('hidden');
+    }
     
       document.getElementById('discountText').innerText = (discountName && discountAmount) ? `${discountName}: -$${discountAmount}` : '';
       document.getElementById('expirationText').innerText = expirationDate ? `*This bid is valid until ${expirationDate}` : '';
