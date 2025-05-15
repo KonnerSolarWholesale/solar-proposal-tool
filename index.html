@@ -39,7 +39,7 @@
       <input type="text" placeholder="Inverter Details" name="inverter" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Battery Info" name="battery" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Optimizers" name="optimizers" class="border p-2 rounded w-full" />
-      <input type="text" placeholder="System Cost (e.g., 20000)" name="initialCost" class="border p-2 rounded w-full" required />
+      <input type="text" placeholder="System Cost" name="initialCost" class="border p-2 rounded w-full" required />
       <input type="text" placeholder="Discount Name (e.g., Memorial Day Discount)" name="discountName" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Discount Amount (e.g., 500)" name="discountAmount" class="border p-2 rounded w-full" />
       <input type="text" placeholder="Sales Rep Name" name="repName" class="border p-2 rounded w-full" />
@@ -63,8 +63,9 @@
       <ul class="list-disc ml-6 space-y-1 text-sm" id="equipmentList"></ul>
       <div class="mt-6 text-sm text-gray-700 space-y-1">
         <p id="grossCostText" class="font-semibold"></p>
-        <p id="discountText" class="text-gray-700 text-sm hidden"></p>
-        <p id="netCostText" class="font-bold text-md text-gray-900 hidden"></p>
+<p id="discountText" class="text-gray-700 text-sm hidden"></p>
+<p id="netCostText" class="font-bold text-md text-gray-900 hidden"></p>
+        <p id="discountText" class="text-gray-700 text-sm"></p>
         <p class="italic text-sm mt-2 text-gray-600">
           You would be eligible for the 30% Federal Tax Credit, but because you're completely reliant on claiming that yourself, we don't like to include it in our price.
         </p>
@@ -92,14 +93,13 @@
       const initialCost = form.initialCost.value;
       const discountName = form.discountName.value;
       const discountAmount = form.discountAmount.value;
+const grossCost = parseFloat(initialCost.replace(/[^\d.]/g, ""));
+const discountValue = parseFloat(discountAmount.replace(/[^\d.]/g, "")) || 0;
+const netCost = grossCost - discountValue;
       const repName = form.repName.value;
       const repEmail = form.repEmail.value;
       const repPhone = form.repPhone.value;
       const expirationDate = form.expirationDate.value;
-
-      const grossCost = parseFloat(initialCost.replace(/[^\d.]/g, ""));
-      const discountValue = parseFloat(discountAmount.replace(/[^\d.]/g, "")) || 0;
-      const netCost = grossCost - discountValue;
 
       document.getElementById('dateText').innerText = date;
       document.getElementById('proposalTitle').innerText = `Solar Proposal For ${customer}`;
@@ -119,21 +119,25 @@
         <li>Shipping</li>
       `;
 
-      document.getElementById('grossCostText').innerText = `System Cost: $${grossCost.toLocaleString()}`;
-      const discountLine = document.getElementById('discountText');
-      const netLine = document.getElementById('netCostText');
-      if (discountName && discountAmount) {
-        discountLine.innerText = `${discountName}: -$${discountValue.toLocaleString()}`;
-        netLine.innerText = `Total After Discount: $${netCost.toLocaleString()}`;
-        discountLine.classList.remove('hidden');
-        netLine.classList.remove('hidden');
-      } else {
-        discountLine.classList.add('hidden');
-        netLine.classList.add('hidden');
-      }
-
+      
+    document.getElementById('grossCostText').innerText = `System Cost: $${grossCost.toLocaleString()}`;
+    const discountLine = document.getElementById('discountText');
+    const netLine = document.getElementById('netCostText');
+    if (discountName && discountAmount) {
+      discountLine.innerText = `${discountName}: -$${discountValue.toFixed(2)}`;
+      netLine.innerText = `Total After Discount: $${netCost.toLocaleString()}`;
+      discountLine.classList.remove('hidden');
+      netLine.classList.remove('hidden');
+    } else {
+      discountLine.classList.add('hidden');
+      netLine.classList.add('hidden');
+    }
+    
+      document.getElementById('discountText').innerText = (discountName && discountAmount) ? `${discountName}: -$${discountAmount}` : '';
       document.getElementById('expirationText').innerText = expirationDate ? `*This bid is valid until ${expirationDate}` : '';
       document.getElementById('customContactInfo').innerText = `Contact: ${repName || 'Sales Rep'} | ${repEmail || 'email@example.com'} | ${repPhone || '555-555-5555'}`;
+
+      content.classList.remove('hidden');
 
       html2canvas(content, { scale: 2 }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
