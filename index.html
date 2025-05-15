@@ -136,9 +136,9 @@
       document.getElementById('customContactInfo').innerText = `Contact: ${repName || 'Sales Rep'} | ${repEmail || 'email@example.com'} | ${repPhone || '555-555-5555'}`;
 
       html2canvas(content, { scale: 1 }).then(canvas => {
-        const imgData = canvas.toDataURL('image/jpeg');
+        const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1120, 792] });
-        pdf.addImage(imgData, 'JPEG', 0, 0, 1120, 792);
+        pdf.addImage(imgData, 'PNG', 0, 0, 1120, 792);
         pdf.save(`SolarProposal-${customer.replaceAll(' ', '_')}.pdf`);
         content.classList.add('hidden');
       });
